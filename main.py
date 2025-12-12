@@ -23,7 +23,7 @@ def main():
 
     # ---------- Init Game Logic ----------
     clock = pygame.time.Clock()
-    gameloop.player = Snake(width//2, height//2, Direction.DOWN, int(4 * utils.SCALE))
+    gameloop.player = Snake(gridsize//2, gridsize//2, Direction.DOWN, int(4 * utils.SCALE))
     gameloop.fruit = Fruit(utils.Position(0, 0))
     pygame.time.set_timer(gameloop.FRUITSPAWN_EVENT, gameloop.FRUITSPAWN_TIMER)
     # ---------- Game Loop ----------

@@ -8,7 +8,6 @@ class Fruit():
         self.position = position
         self._image = pygame.image.load('./Assets/fruit.png')
         self._image = pygame.transform.scale(self._image, (utils.SCALE, utils.SCALE))
-        print(f"\t\t\t\tAICI E FRUCTUL {self.position.x} {self.position.y}")
 
     def render(self, surface: pygame.Surface):
         surface.blit(self._image, (self.position.x * utils.SCALE, self.position.y * utils.SCALE))

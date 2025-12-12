@@ -52,15 +52,11 @@ class Snake(AbstractSnake):
     def move(self):
         current_time = pygame.time.get_ticks()
         if(current_time - self.last_move_time > self.movespeed):
-            new_head = (self._bodyparts[0] + self._facing) % utils.GRIDSIZE
-            if (self.check_collision(new_head)):
+            new_head = (self._bodyparts[0] + self._facing)# % utils.GRIDSIZE # daca scoti % GRIDSIZE nu mai pleci dintr un capat in altul
+            if (self.check_collision(new_head) or new_head.x < 0 or new_head.x > utils.GRIDSIZE or new_head.y < 0 or new_head.y > utils.GRIDSIZE): # or new_head.x < 0 or new_head.x > GRIDSIZE or new_head.y < 0 or new_head.y > GRIDSIZE
                 raise NotImplementedError("Aici trebuie sa pierzi")
                 pass  # lose logic here
             self._bodyparts.pop(-1)
-            print(f"pos {self._bodyparts}")
-            for i in self._bodyparts:
-                print(f"POSITIONSs {len(self._bodyparts)}")
-                print(i)
             self._bodyparts.insert(0, new_head)
             self.last_move_time = current_time
             self._lastfacing = self._facing
@@ -68,13 +64,12 @@ class Snake(AbstractSnake):
 
     def grow(self):
         head : Position = self._bodyparts[0]
-        new_head : Position = (head + self._facing) % utils.GRIDSIZE
+        new_head : Position = (head + self._facing)# % utils.GRIDSIZE # daca scoti % GRIDSIZE nu mai pleci dintr un capat in altul
         self._bodyparts.insert(0, new_head)
 
     def change_direction(self, direction:Position):
         if(self._lastfacing != (direction * -1)):
             self._facing = direction
-        print(self._facing)
 
     def check_collision_with_fruit(self, other:Fruit):
         head = self._bodyparts[0]
@@ -86,8 +81,8 @@ class Snake(AbstractSnake):
     def render(self, screen : pygame.Surface):
         size = len(self._bodyparts)
         from colour import Color
-        red = Color("coral")
-        colors = list(red.range_to(Color("papayawhip"), size))
+        red = Color("orange")
+        colors = list(red.range_to(Color("coral"), size))
         for i, bodypart in enumerate(self._bodyparts):
             tileColor = Color.get_rgb(colors[i])
             tileColor = list((tileColor[0]*255, tileColor[1]*255, tileColor[2]*255))
