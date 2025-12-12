@@ -53,7 +53,7 @@ class Snake(AbstractSnake):
         current_time = pygame.time.get_ticks()
         if(current_time - self.last_move_time > self.movespeed):
             new_head = (self._bodyparts[0] + self._facing)# % utils.GRIDSIZE # daca scoti % GRIDSIZE nu mai pleci dintr un capat in altul
-            if (self.check_collision(new_head) or new_head.x < 0 or new_head.x > utils.GRIDSIZE or new_head.y < 0 or new_head.y > utils.GRIDSIZE): # or new_head.x < 0 or new_head.x > GRIDSIZE or new_head.y < 0 or new_head.y > GRIDSIZE
+            if (self.check_collision(new_head) or new_head.x < 0 or new_head.x >= utils.GRIDSIZE or new_head.y < 0 or new_head.y >= utils.GRIDSIZE): # or new_head.x < 0 or new_head.x > GRIDSIZE or new_head.y < 0 or new_head.y > GRIDSIZE
                 raise NotImplementedError("Aici trebuie sa pierzi")
                 pass  # lose logic here
             self._bodyparts.pop(-1)

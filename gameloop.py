@@ -48,14 +48,16 @@ def HandleEvents(events: list):
 
 def Update():
     # -- update game here
-    player.move()
+   #d player.move()
     if player.check_collision_with_fruit(fruit):
         player.grow()
         fruit.eaten = True
+    else:
+        player.move()
     pass
 
 def Render(screen : pygame.Surface):
-    screen.fill(BACKGROUNDCOLOR)
+    screen.fill((34, 139, 34))
     Map.Render(screen)
     player.render(screen)
     if not fruit.eaten:
