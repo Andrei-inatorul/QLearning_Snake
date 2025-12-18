@@ -62,5 +62,8 @@ def Render(screen : pygame.Surface):
     player.render(screen)
     if not fruit.eaten:
         fruit.render(screen)
+    my_font = pygame.font.SysFont('Comic Sans MS', 30)
+    text_surface = my_font.render(f'Score: {player.get_score()}', True, (0, 0, 0))
+    screen.blit(text_surface, (0, 0))
     # -- render code goes here
     pygame.display.update()

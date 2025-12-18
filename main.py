@@ -20,12 +20,13 @@ def main():
     utils.SCALE = width/gridsize
     utils.GRIDSIZE = gridsize
     pygame.display.set_caption("Q_Learning_Snake - Lefter Andrei & Lunca Vlad")
-
+    pygame.font.init()
     # ---------- Init Game Logic ----------
     clock = pygame.time.Clock()
     gameloop.player = Snake(gridsize//2, gridsize//2, Direction.DOWN, int(4 * utils.SCALE))
     gameloop.fruit = Fruit(utils.Position(2, 2))
     pygame.time.set_timer(gameloop.FRUITSPAWN_EVENT, gameloop.FRUITSPAWN_TIMER)
+
     # ---------- Game Loop ----------
     while True:
         # ---------- Handle KeyPresses and Other Events ----------

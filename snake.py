@@ -61,6 +61,9 @@ class Snake(AbstractSnake):
             self.last_move_time = current_time
             self._lastfacing = self._facing
 
+    def get_score(self) -> int:
+        return len(self._bodyparts) - 3
+    
 
     def grow(self):
         head : Position = self._bodyparts[0]
