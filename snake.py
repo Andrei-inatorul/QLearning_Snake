@@ -4,7 +4,7 @@ import utils
 from map import Fruit
 from utils import Position
 
-class Direction():
+class Direction:
     UP = Position(0, -1)
     DOWN = Position(0, 1)
     LEFT = Position(-1, 0)
@@ -49,11 +49,32 @@ class Snake(AbstractSnake):
             return True
         return False
 
+    def get_state(this, fruit):
+        head = this._bodyparts[0]
+
+        delta_x = fruit.position.x - head.x
+        delta_y = fruit.position.y - head.y
+
+
+        state = [
+            int(this._facing == Direction.LEFT),
+            int(this._facing == Direction.RIGHT),
+            int(this._facing == Direction.UP),
+            int(this._facing == Direction.DOWN),
+            int(delta_x),
+            int(delta_y),
+
+            int(head.x == 0 or this.check_collision(Position(head.x - 1, head.y))),  # STANGA
+            int(head.x == utils.GRIDSIZE - 1 or this.check_collision(Position(head.x + 1, head.y))),  # dreapta
+            int(head.y == 0 or this.check_collision(Position(head.x, head.y - 1))),  # sus
+            int(head.y == utils.GRIDSIZE - 1 or this.check_collision(Position(head.x, head.y + 1)))  # jos
+        ]
+        return tuple(state)
     def move(self):
         current_time = pygame.time.get_ticks()
-        if(current_time - self.last_move_time > self.movespeed):
+        if current_time - self.last_move_time > self.movespeed:
             new_head = (self._bodyparts[0] + self._facing)# % utils.GRIDSIZE # daca scoti % GRIDSIZE nu mai pleci dintr un capat in altul
-            if (self.check_collision(new_head) or new_head.x < 0 or new_head.x >= utils.GRIDSIZE or new_head.y < 0 or new_head.y >= utils.GRIDSIZE): # or new_head.x < 0 or new_head.x > GRIDSIZE or new_head.y < 0 or new_head.y > GRIDSIZE
+            if self.check_collision(new_head) or new_head.x < 0 or new_head.x >= utils.GRIDSIZE or new_head.y < 0 or new_head.y >= utils.GRIDSIZE: # or new_head.x < 0 or new_head.x > GRIDSIZE or new_head.y < 0 or new_head.y > GRIDSIZE
                 raise NotImplementedError("Aici trebuie sa pierzi")
                 pass  # lose logic here
             self._bodyparts.pop(-1)
@@ -71,7 +92,7 @@ class Snake(AbstractSnake):
         self._bodyparts.insert(0, new_head)
 
     def change_direction(self, direction:Position):
-        if(self._lastfacing != (direction * -1)):
+        if self._lastfacing != (direction * -1):
             self._facing = direction
 
     def check_collision_with_fruit(self, other:Fruit):
@@ -87,7 +108,7 @@ class Snake(AbstractSnake):
         red = Color("orange")
         colors = list(red.range_to(Color("coral"), size))
         for i, bodypart in enumerate(self._bodyparts):
-            tileColor = Color.get_rgb(colors[i])
-            tileColor = list((tileColor[0]*255, tileColor[1]*255, tileColor[2]*255))
-            pygame.draw.rect(screen, tileColor, pygame.Rect(bodypart.x * utils.SCALE, bodypart.y * utils.SCALE, utils.SCALE, utils.SCALE))
+            tile_color = Color.get_rgb(colors[i])
+            tile_color = list((tile_color[0]*255, tile_color[1]*255, tile_color[2]*255))
+            pygame.draw.rect(screen, tile_color, pygame.Rect(bodypart.x * utils.SCALE, bodypart.y * utils.SCALE, utils.SCALE, utils.SCALE))
             #pygame.draw.circle(screen, (255, 0, 0), (bodypart.x*SCALE+SCALE/2, bodypart.y*SCALE+SCALE/2), SCALE/2)

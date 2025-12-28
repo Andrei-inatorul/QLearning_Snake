@@ -2,7 +2,7 @@ import pygame
 from utils import Position
 import utils
 
-class Fruit():
+class Fruit:
     eaten = False
     def __init__(self, position: Position):
         self.position = position
@@ -13,9 +13,9 @@ class Fruit():
         surface.blit(self._image, (self.position.x * utils.SCALE, self.position.y * utils.SCALE))
 
 
-class Map():
+class Map:
     @staticmethod
-    def Render(screen: pygame.Surface):
+    def render(screen: pygame.Surface):
         for i in range(0, utils.GRIDSIZE):
             for j in range(0, utils.GRIDSIZE):
                 if j&1 == i&1:

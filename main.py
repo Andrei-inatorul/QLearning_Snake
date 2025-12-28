@@ -1,6 +1,7 @@
+import configparser
 import pygame
 import gameloop
-import configparser
+from QAgent import QAgent
 
 from map import Fruit
 from snake import Snake, Direction
@@ -9,32 +10,35 @@ import utils
 def main():
     # ------------- Init Pygame ----------
     pygame.init()
-    CfgParser = configparser.ConfigParser()
-    CfgParser.read('config.ini')
+    cfg_parser = configparser.ConfigParser()
+    cfg_parser.read('config.ini')
 
     # ---------- Window Settings ----------
-    width = int(CfgParser.get('Display Settings', 'width'))
-    height = int(CfgParser.get('Display Settings', 'height'))
-    gridsize = int(CfgParser.get('Display Settings', 'gridsize'))
+    width = int(cfg_parser.get('Display Settings', 'width'))
+    height = int(cfg_parser.get('Display Settings', 'height'))
+    gridsize = int(cfg_parser.get('Display Settings', 'gridsize'))
     screen = pygame.display.set_mode((width, height))
     utils.SCALE = width/gridsize
     utils.GRIDSIZE = gridsize
     pygame.display.set_caption("Q_Learning_Snake - Lefter Andrei & Lunca Vlad")
-    pygame.font.init()
-    # ---------- Init Game Logic ----------
-    clock = pygame.time.Clock()
-    gameloop.player = Snake(gridsize//2, gridsize//2, Direction.DOWN, int(4 * utils.SCALE))
-    gameloop.fruit = Fruit(utils.Position(2, 2))
-    pygame.time.set_timer(gameloop.FRUITSPAWN_EVENT, gameloop.FRUITSPAWN_TIMER)
 
+    # ---------- Init Game Logic ----------
+    gameloop.start(gridsize)
     # ---------- Game Loop ----------
+    agent = QAgent()
+
     while True:
         # ---------- Handle KeyPresses and Other Events ----------
-        gameloop.HandleEvents(pygame.event.get())
+        try:
+            # Încercăm să executăm pasul de joc prin AI
+            # handle_situation va rula logica de snake.move() care dă eroarea
+            gameloop.handle_situation(agent)
+        except NotImplementedError:
+            gameloop.reset(agent,gridsize)
         # ---------- Update Physics ----------
-        gameloop.Update()
+            #gameloop.update()
         # ---------- Render Window ----------
-        gameloop.Render(screen)
+        gameloop.render(screen)
 
 if __name__ == '__main__':
     main()
