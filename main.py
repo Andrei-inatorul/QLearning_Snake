@@ -17,10 +17,10 @@ def main():
     width = int(cfg_parser.get('Display Settings', 'width'))
     height = int(cfg_parser.get('Display Settings', 'height'))
     gridsize = int(cfg_parser.get('Display Settings', 'gridsize'))
-    screen = pygame.display.set_mode((width, height))
+   #screen = pygame.display.set_mode((width, height))
     utils.SCALE = width/gridsize
     utils.GRIDSIZE = gridsize
-    pygame.display.set_caption("Q_Learning_Snake - Lefter Andrei & Lunca Vlad")
+    #pygame.display.set_caption("Q_Learning_Snake - Lefter Andrei & Lunca Vlad")
 
     # ---------- Init Game Logic ----------
     gameloop.start(gridsize)
@@ -38,7 +38,7 @@ def main():
         # ---------- Update Physics ----------
             #gameloop.update()
         # ---------- Render Window ----------
-        gameloop.render(screen)
+       # gameloop.render(screen)
 
 if __name__ == '__main__':
     main()

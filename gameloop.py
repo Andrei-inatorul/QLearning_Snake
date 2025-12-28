@@ -109,5 +109,6 @@ def reset(agent,gridsize):
     # Cand se lpveste de cv resetam jocul pt a continua antrenarea
     state_now = player.get_state(fruit)
     agent.train(state_now, agent.last_action, -100, state_now)
+    print("score:" + agent.getScore(state_now))
     start(gridsize)
     agent.save_model()

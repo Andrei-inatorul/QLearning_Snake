@@ -9,7 +9,7 @@ class QAgent:
         self.q_table = {}  # Dicționar: {stare: [scor_sus, scor_jos, scor_stanga, scor_dreapta]}
         self.lr = 0.1
         self.gamma = 0.9
-        self.epsilon = 0.1
+        self.epsilon = 0.3
         self.filename=filename
         self.load_model()
 
@@ -57,3 +57,5 @@ class QAgent:
                 print(f"Model încărcat cu succes! ({len(self.q_table)} stări)")
             except:
                 print("Eroare la încărcarea fișierului JSON. Se începe de la zero.")
+
+
