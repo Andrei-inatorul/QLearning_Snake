@@ -57,17 +57,13 @@ class Snake(AbstractSnake):
 
 
         state = [
-            int(this._facing == Direction.LEFT),
-            int(this._facing == Direction.RIGHT),
-            int(this._facing == Direction.UP),
-            int(this._facing == Direction.DOWN),
+            this._facing,
             int(delta_x),
             int(delta_y),
-
-            int(head.x == 0 or this.check_collision(Position(head.x - 1, head.y))),  # STANGA
-            int(head.x == utils.GRIDSIZE - 1 or this.check_collision(Position(head.x + 1, head.y))),  # dreapta
-            int(head.y == 0 or this.check_collision(Position(head.x, head.y - 1))),  # sus
-            int(head.y == utils.GRIDSIZE - 1 or this.check_collision(Position(head.x, head.y + 1)))  # jos
+            head.x == 0 or this.check_collision(Position(head.x - 1, head.y)),  # STANGA
+            head.x == utils.GRIDSIZE - 1 or this.check_collision(Position(head.x + 1, head.y)),  # dreapta
+            head.y == 0 or this.check_collision(Position(head.x, head.y - 1)),  # sus
+            head.y == utils.GRIDSIZE - 1 or this.check_collision(Position(head.x, head.y + 1))  # jos
         ]
         return tuple(state)
     def move(self):
