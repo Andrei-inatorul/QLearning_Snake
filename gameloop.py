@@ -73,8 +73,6 @@ def handle_events(events: list):
                 player.change_direction(Direction.DOWN)
             if event.key == pygame.K_UP: # debug only
                 player.grow()
-        if event.type == AGENT_DECISION_EVENT:
-            handle_situation(agent)
 
 def handle_situation(QAgent):
     global fruit, player
