@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 import pygame
-from numpy.ma.core import left_shift
 
 import utils
 from map import Fruit

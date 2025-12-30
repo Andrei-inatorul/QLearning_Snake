@@ -46,7 +46,7 @@ fruit: Fruit = None
 iteration: int = 1
 scores: list[int] = []
 
-def handle_events(events: list, agent):
+def handle_events(events: list):
     for event in events:
         if event.type == pygame.QUIT:
             pygame.quit()

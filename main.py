@@ -1,13 +1,9 @@
 import configparser
-from inspect import get_annotations
 
 import pygame
 import gameloop
 from QAgent import QAgent
-from gameloop import train_mode
 
-from map import Fruit
-from snake import Snake, Direction
 import utils
 
 def main():
@@ -34,7 +30,7 @@ def main():
    # pygame.time.set_timer(gameloop.AGENT_DECISION_EVENT, gameloop.AGENT_DECISION_TIMER)
     while True:
         # ---------- Handle KeyPresses and Other Events ----------
-        gameloop.handle_events(pygame.event.get(), agent)
+        gameloop.handle_events(pygame.event.get())
         alive = gameloop.handle_situation(agent)
         if not alive:
             gameloop.reset(agent, gridsize)
