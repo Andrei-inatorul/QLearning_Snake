@@ -58,6 +58,25 @@ class Snake(AbstractSnake):
                 return True # ma lovesc de perete
             return self.check_collision(other) # ma lovesc de mine
 
+    def get_reachable_space(self, start_pos: Position):
+        queue = [start_pos]
+        visited = set()
+        count = 0
+        max_check = self.get_score() + 5
+
+        while queue and count < max_check:
+            curr = queue.pop(0)
+            if (curr.x, curr.y) in visited or self.is_unsafe(curr):
+                continue
+            visited.add((curr.x, curr.y))
+            count += 1
+
+            queue.append(Position(curr.x + 1, curr.y))
+            queue.append(Position(curr.x - 1, curr.y))
+            queue.append(Position(curr.x, curr.y + 1))
+            queue.append(Position(curr.x, curr.y - 1))
+        return count
+
     def get_state(this, fruit) -> tuple:
         head = this._bodyparts[0]
 
@@ -68,6 +87,11 @@ class Snake(AbstractSnake):
         r = Position(head.x + 1, head.y)
         u = Position(head.x, head.y - 1)
         d = Position(head.x, head.y + 1)
+
+        space_u = this.get_reachable_space(u) > len(this._bodyparts)
+        space_d = this.get_reachable_space(d) > len(this._bodyparts)
+        space_l = this.get_reachable_space(l) > len(this._bodyparts)
+        space_r = this.get_reachable_space(r) > len(this._bodyparts)
 
         state = (
             delta_x < 0,
@@ -84,6 +108,11 @@ class Snake(AbstractSnake):
             this.is_unsafe(d),
             this.is_unsafe(l),
             this.is_unsafe(r),
+
+            space_u,
+            space_d,
+            space_l,
+            space_r
         )
         return tuple(map(int, state))
 

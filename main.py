@@ -3,11 +3,13 @@ import configparser
 import pygame
 import gameloop
 from QAgent import QAgent
-
+import os
 import utils
 
 def main():
     # ------------- Init Pygame ----------
+
+    #os.environ['SDL_VIDEODRIVER'] = 'dummy'
     pygame.init()
     cfg_parser = configparser.ConfigParser()
     cfg_parser.read('config.ini')
@@ -26,7 +28,7 @@ def main():
     clock = pygame.time.Clock()
     speed = 1000 if gameloop.train_mode else 10
     # ---------- Game Loop ----------
-    agent = QAgent(epsilon=1.0 if gameloop.train_mode else 0.0)
+    agent = QAgent(epsilon=0.01 if gameloop.train_mode else 0.0)
    # pygame.time.set_timer(gameloop.AGENT_DECISION_EVENT, gameloop.AGENT_DECISION_TIMER)
     while True:
         # ---------- Handle KeyPresses and Other Events ----------

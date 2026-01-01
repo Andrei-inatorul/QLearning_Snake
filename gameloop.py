@@ -86,16 +86,31 @@ def handle_situation(QAgent):
     directions = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
 
     player.change_direction(directions[action])
-
+    head = player.get_postion()[0]
+    l = Position(head.x - 1, head.y)
+    r = Position(head.x + 1, head.y)
+    u = Position(head.x, head.y - 1)
+    d = Position(head.x, head.y + 1)
+    space_u = player.get_reachable_space(u) > player.get_score() + 3
+    space_d = player.get_reachable_space(d) > player.get_score() + 3
+    space_l = player.get_reachable_space(l) > player.get_score() + 3
+    space_r = player.get_reachable_space(r) > player.get_score() + 3
+    directions_map = {
+        0: space_u,
+        1: space_d,
+        2: space_l,
+        3: space_r
+    }
     reward = -0.1
-
+    if not directions_map[directions.index(player.facing)]:
+        reward = -5
     player.move()
     if player.check_collision_with_fruit(fruit):
         player.grow()
         fruit.eaten = True
         reward = 10
         player.movement_since_last_fruit = 0
-        print("Fruct mancat")
+       # print("Fruct mancat")
         fruit = Fruit(Position(randrange(utils.GRIDSIZE), randrange(utils.GRIDSIZE)))
     else:
         player.movement_since_last_fruit += 1
@@ -131,6 +146,9 @@ def render(screen : pygame.Surface):
     global iteration
     text_surface = my_font.render(f'Iteration: {iteration}', True, (0, 0, 0))
     screen.blit(text_surface, (0, 30))
+    if(len(all_scores) > 0):
+        text_surface = my_font.render(f'Best: {max(all_scores)}', True, (0, 0, 0))
+        screen.blit(text_surface, (150, 0))
     # -- render code goes here
     pygame.display.update()
 
@@ -169,10 +187,11 @@ def reset(agent: QAgent ,gridsize):
     # Cand se lpveste de cv resetam jocul pt a continua antrenarea
     global iteration, scores
     state_now = player.get_state(fruit)
-
-    plot()
+    if iteration % 100 == 0:
+        plot()
 
     print(f"========= Iteration {iteration} ==========")
+    print(f"score: {player.get_score()}")
     agent.epsilon = max(agent.epsilon * decay_rate, min_epsilon)
     print("Epsilon: ", agent.epsilon)
     start(gridsize)
