@@ -112,6 +112,10 @@ def handle_situation(QAgent):
         player.movement_since_last_fruit = 0
        # print("Fruct mancat")
         fruit = Fruit(Position(randrange(utils.GRIDSIZE), randrange(utils.GRIDSIZE)))
+        while fruit.position in player.get_postion():
+            x = randrange(utils.GRIDSIZE)
+            y = randrange(utils.GRIDSIZE)
+            fruit = Fruit(Position(x, y))
     else:
         player.movement_since_last_fruit += 1
 
@@ -162,7 +166,7 @@ def start(gridsize):
         x = randrange(utils.GRIDSIZE)
         y = randrange(utils.GRIDSIZE)
         fruit = Fruit(Position(x, y))
-    pygame.time.set_timer(FRUITSPAWN_EVENT, FRUITSPAWN_TIMER)
+    #pygame.time.set_timer(FRUITSPAWN_EVENT, FRUITSPAWN_TIMER)
 
 def plot():
     global iteration, scores

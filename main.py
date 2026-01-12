@@ -5,11 +5,12 @@ import gameloop
 from QAgent import QAgent
 import os
 import utils
+import sys
+import ui
+from gameloop import train_mode
 
 def main():
     # ------------- Init Pygame ----------
-
-    #os.environ['SDL_VIDEODRIVER'] = 'dummy'
     pygame.init()
     cfg_parser = configparser.ConfigParser()
     cfg_parser.read('config.ini')
@@ -23,6 +24,18 @@ def main():
     utils.GRIDSIZE = gridsize
     pygame.display.set_caption("Q_Learning_Snake - Lefter Andrei & Lunca Vlad")
 
+    gametype = ui.titlescreen(screen)
+    ai_mode = False
+    if(gametype == 1):
+        gameloop.train_mode = False
+        ai_mode = False
+    elif gametype == 2:
+        gameloop.train_mode = True
+        ai_mode = True
+    elif gametype == 3:
+        gameloop.train_mode = False
+        ai_mode = True
+
     # ---------- Init Game Logic ----------
     gameloop.start(gridsize)
     clock = pygame.time.Clock()
@@ -31,11 +44,12 @@ def main():
     agent = QAgent(epsilon=0.01 if gameloop.train_mode else 0.0)
    # pygame.time.set_timer(gameloop.AGENT_DECISION_EVENT, gameloop.AGENT_DECISION_TIMER)
     while True:
-        # ---------- Handle KeyPresses and Other Events ----------
+        # ---------- EVENIMENTE ----------
         gameloop.handle_events(pygame.event.get())
-        alive = gameloop.handle_situation(agent)
+        alive = gameloop.handle_situation(agent) if ai_mode == True else gameloop.update()
         if not alive:
             gameloop.reset(agent, gridsize)
+
         # try:
         #     pass
         #     # Încercăm să executăm pasul de joc prin AI
