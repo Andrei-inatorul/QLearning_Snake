@@ -3,11 +3,31 @@ import configparser
 import pygame
 import gameloop
 from QAgent import QAgent
-import os
 import utils
-import sys
 import ui
-from gameloop import train_mode
+
+def game_loop_player(screen, gridsize, clock, speed):
+    while True:
+        # ---------- EVENIMENTE ----------
+        gameloop.handle_events(pygame.event.get())
+
+
+        alive = gameloop.update()
+        if not alive:
+            gameloop.reset_player(gridsize)
+        gameloop.render(screen)
+        clock.tick(speed)
+
+def game_loop_ai(screen, gridsize, clock, speed, agent):
+    while True:
+        # ---------- EVENIMENTE ----------
+        gameloop.handle_events(pygame.event.get())
+        alive = gameloop.handle_situation(agent)
+        if not alive:
+            gameloop.reset(agent, gridsize)
+        # ---------- Render Window ----------
+        gameloop.render(screen)
+        clock.tick(speed)
 
 def main():
     # ------------- Init Pygame ----------
@@ -41,26 +61,30 @@ def main():
     clock = pygame.time.Clock()
     speed = 1000 if gameloop.train_mode else 10
     # ---------- Game Loop ----------
-    agent = QAgent(epsilon=0.01 if gameloop.train_mode else 0.0)
+    if ai_mode:
+        agent = QAgent(epsilon=1.0 if gameloop.train_mode else 0.0)
+        game_loop_ai(screen, gridsize, clock, speed, agent)
+    else:
+        game_loop_player(screen, gridsize, clock, speed)
    # pygame.time.set_timer(gameloop.AGENT_DECISION_EVENT, gameloop.AGENT_DECISION_TIMER)
-    while True:
-        # ---------- EVENIMENTE ----------
-        gameloop.handle_events(pygame.event.get())
-        alive = gameloop.handle_situation(agent) if ai_mode == True else gameloop.update()
-        if not alive:
-            gameloop.reset(agent, gridsize)
-
-        # try:
-        #     pass
-        #     # Încercăm să executăm pasul de joc prin AI
-        #     # handle_situation va rula logica de snake.move() care dă eroarea
-        #    # gameloop.handle_situation(agent)
-        #     gameloop.handle_events(pygame.event.get(), agent)
-        # except NotImplementedError:
-        #     gameloop.reset(agent,gridsize)
-        # ---------- Update Physics ----------
-        #gameloop.update()
-        # ---------- Render Window ----------
+   #  while True:
+   #      # ---------- EVENIMENTE ----------
+   #      gameloop.handle_events(pygame.event.get())
+   #      alive = gameloop.handle_situation(agent) if ai_mode == True else gameloop.update()
+   #      if not alive:
+   #          gameloop.reset(agent, gridsize)
+   #
+   #      # try:
+   #      #     pass
+   #      #     # Încercăm să executăm pasul de joc prin AI
+   #      #     # handle_situation va rula logica de snake.move() care dă eroarea
+   #      #    # gameloop.handle_situation(agent)
+   #      #     gameloop.handle_events(pygame.event.get(), agent)
+   #      # except NotImplementedError:
+   #      #     gameloop.reset(agent,gridsize)
+   #      # ---------- Update Physics ----------
+   #      #gameloop.update()
+   #      # ---------- Render Window ----------
         gameloop.render(screen)
         clock.tick(speed)
 

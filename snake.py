@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import pygame
+from colour import Color
 
 import utils
 from map import Fruit
@@ -156,7 +157,6 @@ class Snake(AbstractSnake):
 
     def render(self, screen : pygame.Surface):
         size = len(self._bodyparts)
-        from colour import Color
         red = Color("orange")
         colors = list(red.range_to(Color("coral"), size))
         for i, bodypart in enumerate(self._bodyparts):

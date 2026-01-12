@@ -29,14 +29,15 @@ min_epsilon = 0.01 if train_mode else 0.0
 # --------------------
 
 # ------ plot stuff ------------
-plt.ion()
-fig, ax = plt.subplots()
-score_line, = ax.plot([], [], 'r-', alpha=0.5)
-mean_line, = ax.plot([], [], 'b-', linewidth=2, label='Scorul Mediu')
-ax.set_xlabel('Iteratia')
-ax.set_ylabel('Scorul')
-ax.set_title('Progresul antrenarii')
-AVERAGE_WINDOW_SIZE = 50
+if(train_mode):
+    plt.ion()
+    fig, ax = plt.subplots()
+    score_line, = ax.plot([], [], 'r-', alpha=0.5)
+    mean_line, = ax.plot([], [], 'b-', linewidth=2, label='Scorul Mediu')
+    ax.set_xlabel('Iteratia')
+    ax.set_ylabel('Scorul')
+    ax.set_title('Progresul antrenarii')
+    AVERAGE_WINDOW_SIZE = 50
 all_scores = []
 # ------------------------------
 
@@ -133,23 +134,31 @@ def handle_situation(QAgent):
 def update():
     # -- update game here
     #player.move()
+    global fruit
     if player.check_collision_with_fruit(fruit):
         player.grow()
-        fruit.eaten = True
+        fruit = Fruit(Position(randrange(utils.GRIDSIZE), randrange(utils.GRIDSIZE)))
+        while fruit.position in player.get_postion():
+            x = randrange(utils.GRIDSIZE)
+            y = randrange(utils.GRIDSIZE)
+            fruit = Fruit(Position(x, y))
     player.move()
+    return player.is_alive
 
 def render(screen : pygame.Surface):
     screen.fill((34, 139, 34))
     Map.render(screen)
-    player.render(screen)
     if not fruit.eaten:
         fruit.render(screen)
+    player.render(screen)
+
     my_font = pygame.font.SysFont('Comic Sans MS', 30)
     text_surface = my_font.render(f'Score: {player.get_score()}', True, (0, 0, 0))
     screen.blit(text_surface, (0, 0))
     global iteration
-    text_surface = my_font.render(f'Iteration: {iteration}', True, (0, 0, 0))
-    screen.blit(text_surface, (0, 30))
+    if(train_mode):
+        text_surface = my_font.render(f'Iteration: {iteration}', True, (0, 0, 0))
+        screen.blit(text_surface, (0, 30))
     if(len(all_scores) > 0):
         text_surface = my_font.render(f'Best: {max(all_scores)}', True, (0, 0, 0))
         screen.blit(text_surface, (150, 0))
@@ -193,7 +202,7 @@ def reset(agent: QAgent ,gridsize):
     state_now = player.get_state(fruit)
     if iteration % 100 == 0:
         plot()
-
+    all_scores.append(player.get_score())
     print(f"========= Iteration {iteration} ==========")
     print(f"score: {player.get_score()}")
     agent.epsilon = max(agent.epsilon * decay_rate, min_epsilon)
@@ -209,3 +218,7 @@ def reset(agent: QAgent ,gridsize):
         print(f"--- PAUZA: Iterația {iteration} atinsa ---")
         input("Apasa ORICE pentru a continua antrenamentul...")
     iteration += 1
+
+def reset_player(gridsize):
+    all_scores.append(player.get_score())
+    start(gridsize)
